@@ -25,9 +25,10 @@ def app(lista_jugadores:list[dict]) -> None:
                 else:
                     print("No se puede guardar el archivo. Primero debe ingresar a la opcion 2.")
             case 4:
-                mostrar_logro_jugador__por_nombre(lista_jugadores)
+                nombre_jugador = input("Ingrese el nombre del jugador a buscar:")
+                mostrar_logros_por_busqueda(lista_jugadores, nombre)
             case 5:
-                promedio_puntos_por_partido_DT_ascendente(lista_de_jugadores)
+                promedio_puntos_por_partido_DT_ascendente(lista_jugadores)
             case 6:
                 imprimir_datos_jugadores_salon(lista_jugadores)
             case 7:
@@ -43,14 +44,13 @@ def app(lista_jugadores:list[dict]) -> None:
                 estadistica_buscada = "promedio_puntos_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
-                else:
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida")
             case 11:
                 estadistica_buscada = "promedio_rebotes_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)(lista_jugadores, estadistica_buscada, float(valor_ingresado))
                 else:
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida") 
             case 12:

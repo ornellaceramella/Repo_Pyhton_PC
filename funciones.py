@@ -33,6 +33,7 @@ def validar_respuesta(expresion: str, ingreso_usuario: str) -> str:
 
     return respuesta_validada
 
+
 def mostrar_menu()-> None:
     menu= '''\n\t------------------- Menu---------------------------------------\n
     
@@ -112,30 +113,55 @@ def mostrar_jugadores_dt (lista_jugadores: list): #1
 
 
 
-def mostrar_estadisticas_jugador_por_indice(lista_jugadores: list[dict])->dict: #2
-    """ 
-    La función recibe una lista de jugadores del Dream Team y permite al usuario ingresar un índice para ver las 
-    estadísticas de ese jugador. Luego, muestra el nombre del jugador y sus estadísticas en forma de diccionario.
+def obtener_nombre_estadisticas(lista_jugadores:list[dict])-> dict:
     """
+    Esta funcion toma una lista de diccionarios que representan a los jugadores y un indice, recupera al
+    al jugador en ese indice, imprime su nombre y estadisticas y devuelve el diccionario que representa a ese jugador.
 
-    cantidad_jugadores=len(lista_jugadores)
-    if cantidad_jugadores<= 0:
-        return 0
+    """
+    if lista_jugadores:
+
+        indice = input("Seleccione un jugador por su indice para ver sus caracteristicas: ")
+        indice = validar_opcion(r'^[0-9]{1,2}$', indice)
+
+        if indice >= 0 and indice < len(lista_jugadores):
+            jugador_con_ese_indice = lista_jugadores[indice]
+            
+            dic_estadisticas = {}
+            dic_estadisticas = jugador_con_ese_indice["estadisticas"]
+
+            print(jugador_con_ese_indice["nombre"])
+            
+            for clave, valor in dic_estadisticas.items():
+                print(clave, valor)
+        else:
+            print("El indice es incorresto {0}".format(indice))
     
-    indice_ingresado= int(input("Ingrese el indice del jugadore para ver sus estadisticas: "))
-    if (indice_ingresado >=0 and indice_ingresado< len(lista_jugadores)):
-        jugador_pedido_por_indice= lista_jugadores[indice_ingresado]
+    return jugador_con_ese_indice
 
-        diccionario_estadisticas={}
-        diccionario_estadisticas= jugador_pedido_por_indice["estadisticas"]
-        print(jugador_pedido_por_indice["nombre"])
-        
-        for clave, valor in diccionario_estadisticas.items():
-            print(clave, valor)
-    else:
-        print("Error: indice ingresado {0} invalido".format(indice_ingresado))
+#3
+def generar_texto(dicc_jugador: dict)-> str:
+    """
+    Esta funcion toma un diccionario de las estadisticas de un jugador y devuelve una cadena formateada
+    que contiene su nombre, posicion y estadisticas
+    """
+    jugador_indice = dicc_jugador
+    jugador_estadisticas = jugador_indice["estadisticas"]
+    nombre_posicion = "{0}, {1}".format(jugador_indice["nombre"],  jugador_indice["posicion"])
 
-    return(jugador_pedido_por_indice)
+    lista_claves = ["nombre", "posicion"]
+    lista_valores =[]
+
+    for clave, valor in jugador_estadisticas.items():
+        lista_claves.append(clave)
+        lista_valores.append(str(valor))
+    
+    claves_str = ",".join(lista_claves)
+    valores_str = ",".join(lista_valores)
+    
+    datos_str = "{0}\n{1}, {2}".format(claves_str, nombre_posicion, valores_str)
+    return datos_str
+
 
 
 def guardar_estadisticas_jugador_CSV(nombre_archivo:str, contenido:str)-> bool:
@@ -150,35 +176,61 @@ def guardar_estadisticas_jugador_CSV(nombre_archivo:str, contenido:str)-> bool:
         print("Se creo el archivo: {0}".format(nombre_archivo))
         return False
     
-    print("Erro al crear el archivo: {0}".format(nombre_archivo))
+    print("Error al crear el archivo: {0}".format(nombre_archivo))
     return False
     
 
-def mostrar_logro_jugador__por_nombre(lista_jugadores): #4
+def buscar_por_nombre(lista_jugadores:list[dict], jugador: dict, nombre: str):
     """
-    Recibe una lista de jugadores del Dream Team y permite al usuario seleccionar un jugador por su nombre para
-     mostrar sus logros. Luego, imprime los logros del jugador seleccionado.
+    Esta funcion busca a traves de RegEx la coincidencia entre el paramtro "nombre" y 
+    el nombre pasado como parametro
+     
+    parametros:
+    lista_jugadores : list[dict]-> la lista original que se importo del JSON
+    busqueda : tipo match.object  | null-> el resultado del re.match utilizado
     """
-    cantidad = len(lista_jugadores)
-    if cantidad <= 0:
-        return 0
-    lista_nombres = []
-    for jugador in lista_jugadores:
-        lista_nombres.append(jugador["nombre"])
-    opcion_seleccionada = ingresar_opcion(lista_nombres)
-    for jugador in lista:
-        if jugador["nombre"] == opcion_seleccionada:
-            jugador_seleccionado = jugador
-    logros = jugador_seleccionado["logros"]
-    for logro in logros:
-        print(str(logro))
+    if len(lista_jugadores) == 0:
+        print("La lista esta vacia")
+        return -1
+    if nombre == " ":
+        print("Ingrese un nombre valido")
 
-def promedio_puntos_por_partido_DT_ascendente(lista_de_jugadores): #5
+    else:
+        busqueda = re.search(f'{nombre}', jugador["nombre"], re.I)
+        return busqueda
+    
+
+#4
+def mostrar_logros_por_busqueda(lista_jugadores: list[dict], nombre: str):
+    """
+    """
+    if len(lista_jugadores) == 0:
+        print("Lista vacia")
+        return False
+    if nombre == " ":
+        print("Ingrese un nombre valido")
+
+    else:
+        lista = lista_jugadores
+        flag_jugador = False
+        for jugador in lista:
+            busqueda =  buscar_por_nombre(lista_jugadores, jugador, nombre) 
+            if busqueda:
+                flag_jugador = True
+                print(jugador["nombre"] + "\n")
+                for logro in jugador["logros"]:
+                    print("- " + logro + "\n")
+        if flag_jugador == False:
+            print("No existe jugador con ese nombre")
+
+
+
+def promedio_puntos_por_partido_DT_ascendente(lista_jugadores): #5
     """   
     realiza un cálculo del promedio de puntos por partido para cada jugador del Dream Team, 
     los ordena por nombre de manera ascendente y luego muestra los nombres de los jugadores en ese orden.
     """
-    cantidad = len(lista)
+    cantidad = len(list)
     if cantidad <= 0:
         return 0
     dict_nombre_puntos = {}
@@ -226,7 +278,7 @@ def encontrar_maximo(lista_jugadores:list[dict], clave_jugador:str, clave_valor:
     if lista_jugadores:
         for jugador in lista_jugadores:
             valor = jugador[clave_jugador][clave_valor]
-            if nombre_maximo in None or valor > maximo:
+            if nombre_maximo == None or valor > maximo:
                 maximo = valor
                 nombre_maximo = jugador["nombre"]
         clave_valor = clave_valor.replace("_"," ")
