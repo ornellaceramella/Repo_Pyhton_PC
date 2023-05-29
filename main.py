@@ -16,12 +16,10 @@ def app(lista_jugadores:list[dict]) -> None:
                 mostrar_jugadores_dt(lista_jugadores, flag_indice)
             case 2 :
                 mostrar_estadisticas_jugador_por_indice(lista_jugadores)
-                
             case 3:
                 guardar_estadisticas_jugador_CSV(nombre_archivo, contenido)
             case 4:
                 mostrar_logro_jugador__por_nombre(lista_jugadores)
-
             case 5:
                 promedio_puntos_por_partido_DT_ascendente(lista_de_jugadores)
             case 6:
@@ -98,6 +96,6 @@ def app(lista_jugadores:list[dict]) -> None:
                     print("valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
         limpiar_consola()
             
-archivo= "dt.json"
+archivo= "pp_lab1_ceramella_ornella\dt.json"
 lista_jugadores= leer_json(archivo)
 app(lista_jugadores)

@@ -23,15 +23,15 @@ def imprimir_dato(dato:str):
     else:
         print("No es una cadena de texto")
 
-def validar_opcion_expresion(expresion: str, ingreso_usuario: str) -> str:
+def validar_respuesta(expresion: str, ingreso_usuario: str) -> str:
     """
     Esta funcion valida que la opcion ingresada sea correcta
     """
-    opcion_validada = False
+    respuesta_validada = False
     if re.match(expresion, ingreso_usuario):
-        opcion_validada =int(ingreso_usuario)
+        respuesta_validada =int(ingreso_usuario)
 
-    return opcion_validada
+    return respuesta_validada
 
 def mostrar_menu()-> None:
     menu= '''\n\t------------------- Menu---------------------------------------\n
@@ -88,8 +88,6 @@ def validar_numeros(dato:str):
         return False
 
 def leer_json (ruta:str, encoding='utf-8'):
-    # path = r"C:\Users\usuario\OneDrive\Documentos\PROGRAMACION Y LAB 1\PP\dt.json"
-    
     with open (ruta, "r") as archivo:
         data= json.load(archivo)
         lista_jugadores = data["jugadores"]
