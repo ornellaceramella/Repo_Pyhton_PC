@@ -13,11 +13,17 @@ def app(lista_jugadores:list[dict]) -> None:
             case 0: 
                 print("Salió de la app")
             case 1:
-                mostrar_jugadores_dt(lista_jugadores, flag_indice)
+                mostrar_jugadores_dt(lista_jugadores)
             case 2 :
-                mostrar_estadisticas_jugador_por_indice(lista_jugadores)
+                mostrar_jugadores_dt(lista_jugadores)
+                jugador_segun_indice = obtener_nombre_estadisticas(lista_jugadores)
             case 3:
-                guardar_estadisticas_jugador_CSV(nombre_archivo, contenido)
+                if jugador_segun_indice:
+                    nombre_archivo = "nombre_estadisticas_jugador.csv"
+                    texto_generado = generar_texto(jugador_segun_indice)
+                    guardar_archivo_csv(nombre_archivo, texto_generado)
+                else:
+                    print("No se puede guardar el archivo. Primero debe ingresar a la opcion 2.")
             case 4:
                 mostrar_logro_jugador__por_nombre(lista_jugadores)
             case 5:
@@ -96,6 +102,6 @@ def app(lista_jugadores:list[dict]) -> None:
                     print("valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
         limpiar_consola()
             
-archivo= "pp_lab1_ceramella_ornella\dt.json"
+archivo= "dt.json"
 lista_jugadores= leer_json(archivo)
 app(lista_jugadores)
