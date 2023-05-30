@@ -226,26 +226,41 @@ def mostrar_logros_por_busqueda(lista_jugadores: list[dict], nombre: str):
 
 
 
-def promedio_puntos_por_partido_DT_ascendente(lista_jugadores): #5
-    """   
-    realiza un cálculo del promedio de puntos por partido para cada jugador del Dream Team, 
-    los ordena por nombre de manera ascendente y luego muestra los nombres de los jugadores en ese orden.
+def mostrar_estadistica_por_jugador_ordenado(lista_jugadores : list[dict], key_orden : str, estadistica: str):
     """
-    cantidad = len(lista_jugadores)
-    if cantidad <= 0:
-        return 0
-    dict_nombre_puntos = {}
+    Esta función toma una lista de diccionarios que contienen información del jugador, la ordena según
+    una clave determinada y muestra el nombre del jugador y una estadística específica para cada
+    jugador.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type lista_jugadores: list[dict]
+    :param key_orden: La clave por la que se ordenará la lista de jugadores
+    :type key_orden: str
+    :param estadistica: El parámetro "estadistica" es una cadena que representa la estadística
+    específica que queremos mostrar para cada jugador en la lista. Se utiliza para acceder al valor
+    correspondiente en el diccionario "estadisticas" del diccionario de cada jugador de la lista
+    :type estadistica: str
+    :return: una lista de listas, donde cada lista interna contiene el nombre de un jugador y su valor
+    correspondiente para la estadística especificada. Sin embargo, la función también tiene una
+    declaración condicional que devuelve False si la lista de entrada está vacía.
+    """
+    """
+    Esta funcion muestra un listado ordenado segun "key_orden", del nombre de los jugadores
+    junto a la estadistica pasada por param. 
+    """   
+    if len(lista_jugadores) == 0:
+        print("Lista vacia")
+        return False
+    lista_aux = lista_jugadores[:]
+    lista = ordenar_lista_segun_key(lista_aux, key_orden)
+    lista_jugador_nombre = []
     for jugador in lista:
-        promedio_puntos = jugador["estadisticas"]["promedio_puntos_por_partido"]
-        nombre = jugador["nombre"]
-        dict_nombre_puntos[nombre] = promedio_puntos
-    jugadores_puntos_ordenados = quick_sort(list(dict_nombre_puntos.values()), True)
-    nombres_ordenados = []
-    for promedio_puntos in jugadores_puntos_ordenados:
-        for jugador in lista:
-            if jugador["estadisticas"]["promedio_puntos_por_partido"] == promedio_puntos:
-                nombres_ordenados.append(jugador["nombre"])
-    print(nombres_ordenados)
+        lista_jugador_nombre.append([jugador["nombre"], jugador["estadisticas"][estadistica]])
+    estadistica_str = estadistica.replace("_"," ").capitalize()
+    for jugador in lista_jugador_nombre:
+        mensaje = "Jugador: {0}\n{1}: {2}\n".format(jugador[0], estadistica_str, jugador[1])
+        print(mensaje)
+    return lista_jugador_nombre
 
 
 def imprimir_datos_jugadores_salon(lista_jugadores: list[dict])-> None: #6
@@ -372,6 +387,8 @@ def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
     Calcula el jugador con mas logros en su carrera
     recibe la lista de jugadores
     retorna el jugador con mas logros obtenidos(dict)
+    crea una copia de la lista original, recorre los logros de cada jugador, si el logro tiene un año, 
+    se incrementa el contador 
     """
     lista_de_jugadores = lista_jugadores[:]
 
@@ -407,7 +424,8 @@ def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
 def jugador_mas_temporadas(jugadores:list[dict])-> None:
     """
     Esta funcion encuentra al jugador(es) con la mayor cantidad de temporadas jugadas en base a una
-    lista de dicc de jugadores y los imprime uno a la vex junto con su cantidad de temporadas 
+    lista de dicc de jugadores y los imprime uno a la vez junto con su cantidad de temporadas
+    (como cuando sacamos un max o min, compara el maximo en cada vuelta con el valor de temporadas que encuentra)
     """
     max_temporadas = 0
     jugadores_max_temporadas = []
@@ -426,8 +444,8 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
 
     
 def determinar_cant_jugadores_por_posicion(lista_de_jugadores:list):
+    
     cantidad_jugadores_por_posicion = {}
-
     for jugador in lista_jugadores:
         posicion = jugador["posicion"]
 
@@ -438,6 +456,16 @@ def determinar_cant_jugadores_por_posicion(lista_de_jugadores:list):
 
     return cantidad_jugadores_por_posicion
 
+def mostrar_lista_jugadores_cantidad_All_Star_descendente(lista_jugadores):
+    pass
+# La salida por pantalla debe tener un formato similar a este:
+# Michael Jordan (14 veces All Star)
+# Magic Johnson (12 veces All-Star)
+
+
+
+def jugador_mejores_estadisticas(jugadores:list[dict])-> None:
+    pass
 
 
 

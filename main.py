@@ -6,31 +6,41 @@ def app(lista_jugadores:list[dict]) -> None:
 
     while True:
          
-        mostrar_menu()
-        respuesta = input("Ingrese una opcion: ")
-        respuesta = validar_respuesta(r'^[1]?[0-9]{1}$|20|23', respuesta)
-        match(respuesta):
-            case 0: 
-                print("Salió de la app")
+        imprimir_menu()
+        opcion = input("Ingrese una opcion: ")
+        opcion = validar_opcion(r'^[1]?[0-9]{1}$|20|23', opcion)   
+
+        match opcion:
+            case 0:
+                print("Salio de la app")
+                break
             case 1:
-                mostrar_jugadores_dt(lista_jugadores)
+                mostrar_dream_team(lista_jugadores)
             case 2 :
-                mostrar_jugadores_dt(lista_jugadores)
+                mostrar_dream_team(lista_jugadores)
                 jugador_segun_indice = obtener_nombre_estadisticas(lista_jugadores)
             case 3:
                 if jugador_segun_indice:
                     nombre_archivo = "nombre_estadisticas_jugador.csv"
                     texto_generado = generar_texto(jugador_segun_indice)
-                    guardar_estadisticas_jugador_CSV(nombre_archivo, contenido)
+                    guardar_archivo_csv(nombre_archivo, texto_generado)
                 else:
                     print("No se puede guardar el archivo. Primero debe ingresar a la opcion 2.")
             case 4:
                 nombre_jugador = input("Ingrese el nombre del jugador a buscar:")
                 mostrar_logros_por_busqueda(lista_jugadores, nombre_jugador)
+
             case 5:
-                mostrar_estadistica_por_jugador_ordenado(lista_jugadores, key_orden, estadistica)
+                estadistica_buscada = "promedio_puntos_por_partido"
+                promedio = calcular_promedio_total(lista_jugadores, estadistica_buscada)
+                if promedio :
+                    mostrar_estadistica_por_jugador_ordenado(lista_jugadores, "nombre", estadistica_buscada)
+                    print("\nEl promedio total del equipo de {0}: {1}\n".format(estadistica_buscada.replace("_"," ").capitalize(), promedio))
+                else:
+                    print("La estadistica buscada no existe")
             case 6:
-                imprimir_datos_jugadores_salon(lista_jugadores)
+                nombre_jugador = input("Ingrese el nombre del jugador a buscar:")
+                buscar_jugador_sfb(lista_jugadores, nombre_jugador)
             case 7:
                 max_rebotes = encontrar_maximo(lista_jugadores, "estadisticas", "rebotes_totales")
                 imprimir_dato(max_rebotes)
@@ -44,13 +54,14 @@ def app(lista_jugadores:list[dict]) -> None:
                 estadistica_buscada = "promedio_puntos_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                else:
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida")
             case 11:
                 estadistica_buscada = "promedio_rebotes_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
                 else:
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida") 
             case 12:
@@ -86,9 +97,9 @@ def app(lista_jugadores:list[dict]) -> None:
                 estadistica_buscada = "porcentaje_tiros_triples"
                 valor_ingresado = input("Ingrese un valor para comparar")
                 if valor_ingresado.replace(".", "").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
                 else:
-                    print("valor ingresado erroneo, vuelva al menu e ingrese una opcion nuevamente")
+                    print("valor inresado erroneo, veulva al menu e ingrese una opcion nuevamente")
 
             case 19:
                 jugador_mas_temporadas(lista_jugadores)
@@ -102,6 +113,7 @@ def app(lista_jugadores:list[dict]) -> None:
                     print("valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
         limpiar_consola()
 
-archivo= "dt.json"
-lista_jugadores= leer_json(archivo)
+
+arcivo = "dt.json"
+lista_jugadores = leer_json(arcivo)
 app(lista_jugadores)
