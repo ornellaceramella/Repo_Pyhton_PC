@@ -34,6 +34,7 @@ def validar_respuesta(expresion: str, ingreso_usuario: str) -> str:
     return respuesta_validada
 
 
+
 def mostrar_menu()-> None:
     menu= '''\n\t------------------- Menu---------------------------------------\n
     
@@ -122,7 +123,7 @@ def obtener_nombre_estadisticas(lista_jugadores:list[dict])-> dict:
     if lista_jugadores:
 
         indice = input("Seleccione un jugador por su indice para ver sus caracteristicas: ")
-        indice = validar_opcion(r'^[0-9]{1,2}$', indice)
+        indice = validar_respuesta(r'^[0-9]{1,2}$', indice)
 
         if indice >= 0 and indice < len(lista_jugadores):
             jugador_con_ese_indice = lista_jugadores[indice]
@@ -230,7 +231,7 @@ def promedio_puntos_por_partido_DT_ascendente(lista_jugadores): #5
     realiza un cálculo del promedio de puntos por partido para cada jugador del Dream Team, 
     los ordena por nombre de manera ascendente y luego muestra los nombres de los jugadores en ese orden.
     """
-    cantidad = len(list)
+    cantidad = len(lista_jugadores)
     if cantidad <= 0:
         return 0
     dict_nombre_puntos = {}
@@ -308,6 +309,41 @@ def mostrar_jugadores_promediado_mas_stat(lista_jugadores:list[dict], estadistic
                     mensaje += "{0} - {1}\n".format(jugador[0], jugador[2], jugador[1])
             print(mensaje)
             return lista_jugadores_prom_mayor
+    
+def ordenar_lista_segun_key(lista_jugadores: list[dict], key_a_ordenar : str, flag_estadistica = False, orden_ascendente = True)-> list:
+    """
+    Esta funcion genera una lista ordenada segun param "key_a_odenar" a traves de un metodo de ordenamiento
+    """
+    if len(lista_jugadores)== 0:
+        print("Lista vacia")
+        return False
+    lista = lista_jugadores[:]
+    rango_a = len(lista)
+    flag_swap = True
+    contador = 0
+    while flag_swap:
+        flag_swap = False
+        for indice_A in range(rango_a -1):
+            contador += 1
+            if flag_estadistica == False:
+                if orden_ascendente == True:
+                    if lista[indice_A][key_a_ordenar] > lista[indice_A+1][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+                elif orden_ascendente == False:
+                    if lista[indice_A][key_a_ordenar] < lista[indice_A+1][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+            elif flag_estadistica == True:
+                if orden_ascendente == True:
+                    if lista[indice_A]["estadisticas"][key_a_ordenar] > lista[indice_A+1]["estadisticas"][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+                elif orden_ascendente == False:
+                    if lista[indice_A]["estadisticas"][key_a_ordenar] < lista[indice_A+1]["estadisticas"][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+    return lista
     
 def generar_promedio_segun_stat_menos_peor_valor(lista_jugadores:list[dict], estadistica: str):
     """
@@ -389,8 +425,19 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
 
 
     
+def determinar_cant_jugadores_por_posicion(lista_de_jugadores:list):
+    cantidad_jugadores_por_posicion = {}
+
+    for jugador in lista_jugadores:
+        posicion = jugador["posicion"]
+
+        if posicion in cantidad_jugadores_por_posicion:
+            cantidad_jugadores_por_posicion[posicion] += 1
+        else:
+            cantidad_jugadores_por_posicion[posicion] = 1
+
+    return cantidad_jugadores_por_posicion
 
 
-          
 
 
