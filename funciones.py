@@ -130,6 +130,10 @@ def imprimir_menu()-> None:
     20. Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por
         posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a
         ese valor.
+    24. Determinar la cantidad de jugadores que hay por cada posición.
+    25. Mostrar la lista de jugadores ordenadas por la cantidad de All-Star de forma descendente.
+    26. Determinar qué jugador tiene las mejores estadísticas en cada valor.
+    27. Determinar qué jugador tiene las mejores estadísticas de todos.
     """
     imprimir_dato(menu)
 def dream_team_menu_principal(): 
@@ -603,6 +607,7 @@ def generar_promedio_segun_stat_menos_peor_valor(lista_jugadores:list[dict], est
     else:
         print("Estadistica inexistente")
 
+
 def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
     """
     Esta función calcula el jugador con más logros en su carrera de una lista de jugadores.
@@ -674,3 +679,61 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
     print("Jugadores con la mayor cantidad de temporadas jugadas:")
     for jugador, temporadas in jugadores_max_temporadas:
         print("Jugador: {} | Temporadas: {}".format(jugador, temporadas))
+
+def cantidad_jugadores_por_posicion(jugadores):
+    jugadores_por_posicion = {}
+    for jugador in jugadores:
+        posicion = jugador["posicion"]
+        if posicion in jugadores_por_posicion:
+            jugadores_por_posicion[posicion] += 1
+        else:
+            jugadores_por_posicion[posicion] = 1
+    
+    for posicion, cantidad in jugadores_por_posicion.items():
+        print(posicion + ": " + str(cantidad))
+
+
+def mejor_estadistica_global(lista_jugadores: list[dict]):
+
+    mejor_jugador = max(lista_jugadores, key=lambda jugador: sum(jugador["estadisticas"].values()))
+    print("Mejor jugador en todas las estadísticas: " + mejor_jugador["nombre"])
+    print("aunque no importa porque el mejor es michael jordan")
+
+def mostrar_jugadores_cantidad_allstar(lista:list):
+
+        lista_aux_jugadores = []
+        for jugador in lista:
+                
+                diccionario_jugador = {}
+                diccionario_jugador["nombre"] = jugador["nombre"]
+                for logros in jugador["logros"]:
+
+                        if re.search(r"^[0-9] +veces All-Star$|^[0-9][0-9] +veces All-Star$",logros):
+
+                                cantidad = logros[:2]
+                                cantidad = int(cantidad)
+                                diccionario_jugador["logros"] = cantidad
+                                lista_aux_jugadores.append(diccionario_jugador)
+                                
+        lista_aux_jugadores = mostrar_estadistica_por_jugador_ordenado(lista_aux_jugadores,"logros",None)
+        return lista_aux_jugadores
+
+def jugador_mejores_estadisticas(jugadores):
+    mejor_jugador = None
+    mejor_puntuacion = 0
+
+    for jugador in jugadores:
+        puntos = jugador["estadisticas"]["puntos"]
+        rebotes = jugador["estadisticas"]["rebotes"]
+        asistencias = jugador["estadisticas"]["asistencias"]
+        bloqueos = jugador["estadisticas"]["bloqueos"]
+        robos = jugador["estadisticas"]["robos"]
+
+        # Criterio de selección: Puntuación total del jugador
+        puntuacion_total = puntos + rebotes + asistencias + bloqueos + robos
+
+        if puntuacion_total > mejor_puntuacion:
+            mejor_puntuacion = puntuacion_total
+            mejor_jugador = jugador
+
+    return mejor_jugador

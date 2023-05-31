@@ -8,7 +8,7 @@ def app(lista_jugadores:list[dict]) -> None:
          
         imprimir_menu()
         opcion = input("Ingrese una opcion: ")
-        opcion = validar_opcion(r'^[1]?[0-9]{1}$|20|23|24|25|26', opcion)   
+        opcion = validar_opcion(r'^[1]?[0-9]{1}$|20|23|24|25|26|27', opcion)   
 
         match opcion:
             case 0:
@@ -112,13 +112,13 @@ def app(lista_jugadores:list[dict]) -> None:
                 else:
                     print("valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
             case 24:
-                cantidad_jugadores_por_posicion(jugadores)
+                cantidad_jugadores_por_posicion(lista_jugadores)
             case 25:
-                mostrar_jugadores_cantidad_allstar(lista)
+                mostrar_jugadores_cantidad_allstar(lista_jugadores) #ver
             case 26:
-                mejor_estadistica_global(lista_jugadores)
+                jugador_mejores_estadisticas_por_valor(lista_jugadores, estadistica) #ver
             case 27:
-                pass
+                jugador_mejores_estadisticas(lista_jugadores)
         limpiar_consola()
 
 
