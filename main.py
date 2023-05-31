@@ -8,7 +8,7 @@ def app(lista_jugadores:list[dict]) -> None:
          
         imprimir_menu()
         opcion = input("Ingrese una opcion: ")
-        opcion = validar_opcion(r'^[1]?[0-9]{1}$|20|23', opcion)   
+        opcion = validar_opcion(r'^[1]?[0-9]{1}$|20|23|24|25|26', opcion)   
 
         match opcion:
             case 0:
@@ -51,24 +51,24 @@ def app(lista_jugadores:list[dict]) -> None:
                 max_asistencias = encontrar_maximo(lista_jugadores, "estadisticas", "asistencias_totales" )
                 imprimir_dato(max_asistencias)
             case 10:
-                estadistica_buscada = "promedio_puntos_por_partido"
+                estadistica = "promedio_puntos_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida")
             case 11:
-                estadistica_buscada = "promedio_rebotes_por_partido"
+                estadistica = "promedio_rebotes_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida") 
             case 12:
-                estadistica_buscada = "promedio_asistencias_por_partido"
+                estadistica = "promedio_asistencias_por_partido"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".","").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
                     print("Valor ingresado erroneo, por favor vuelva al menu e ingrese una opcion valida")
             case 13:
@@ -78,10 +78,10 @@ def app(lista_jugadores:list[dict]) -> None:
                 jugadores_max_bloqueos = encontrar_maximo(lista_jugadores, "estadisticas", "bloqueos_totales")
                 imprimir_dato(jugadores_max_bloqueos)
             case 15:
-                estadistica_buscada = "porcentaje_tiros_libres"
+                estadistica = "porcentaje_tiros_libres"
                 valor_ingresado = input("Ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".", "").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
                     print("valor ingresado erroneo, vuelva al menu e ingrese una opcion valida")
             case 16:
@@ -94,24 +94,34 @@ def app(lista_jugadores:list[dict]) -> None:
                 for logro in dict_jugador["logors"]:
                     print(logro)
             case 18:
-                estadistica_buscada = "porcentaje_tiros_triples"
+                estadistica = "porcentaje_tiros_triples"
                 valor_ingresado = input("Ingrese un valor para comparar")
                 if valor_ingresado.replace(".", "").isnumeric():
-                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica_buscada, float(valor_ingresado))
+                    mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
-                    print("valor inresado erroneo, veulva al menu e ingrese una opcion nuevamente")
+                    print("valor ingresado erroneo, vuelva al menu e ingrese una opcion nuevamente")
 
             case 19:
                 jugador_mas_temporadas(lista_jugadores)
             case 20:
                 lista_ordenada = ordenar_lista_segun_key(lista_jugadores, "posicion")
-                estadistica_buscada = "porcentaje_tiros_de_campo"
+                estadistica_buscada= "porcentaje_tiros_de_campo"
                 valor_ingresado = input("ingrese un valor para comparar: ")
                 if valor_ingresado.replace(".", "").isnumeric():
                     mostrar_jugadores_promediado_mas_stat(lista_ordenada, estadistica_buscada, float(valor_ingresado), True)
                 else:
                     print("valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
+            case 24:
+                cantidad_jugadores_por_posicion(jugadores)
+            case 25:
+                mostrar_jugadores_cantidad_allstar(lista)
+            case 26:
+                mejor_estadistica_global(lista_jugadores)
+            case 27:
+                pass
         limpiar_consola()
+
+
 
 
 arcivo = "dt.json"

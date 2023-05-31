@@ -4,90 +4,14 @@ import csv
 import os
 
 
-
 def limpiar_consola () -> None:
     """
-    Espera a que el usuario presione enter y vacia la consola
+    Espera a que el usuario presione enter y vacia la consola (sistema operativo windows)
     """
 
     _ = input("Presione una tecla para continuar")
     os.system("cls")
-
-def imprimir_dato(dato:str):
-    """
-    La funcion "imprimir_dato" comprueba si la entrada en una cadena de texto y la imprime,
-    de lo contrario imprime un mensaje advirtiendo que no es una cadena lo que se ingreso.
-    """
-    if (type(dato)== str):
-        print(dato)
-    else:
-        print("No es una cadena de texto")
-
-def validar_respuesta(expresion: str, ingreso_usuario: str) -> str:
-    """
-    Esta funcion valida que la opcion ingresada sea correcta
-    """
-    respuesta_validada = False
-    if re.match(expresion, ingreso_usuario):
-        respuesta_validada =int(ingreso_usuario)
-
-    return respuesta_validada
-
-
-
-def mostrar_menu()-> None:
-    menu= '''\n\t------------------- Menu---------------------------------------\n
     
-    0. SALIR
-    1. Mostrar los jugadores y su respectiva posicion
-    2. Mostrar estadisticas de jugador
-    3. Guardar el jugador seleccionado en el punto 
-    4. Buscar jugadore por nombre y mostrar sus logros
-    5. Calcular y mostrar el promedio de puntos por partido del DT
-    6. Ingresar un jugador y mostrar si es miembro del Salon de la Fama
-    7. Calcular y mostrar el jugadore con mayor cantidad de rebotes
-    8. Calcular y mostrar con el mayor porcentaje de tiros de campo
-    9. Calcular y mostrar el jugador con mayor cantidad de asistencias
-    10. Ingresar un valor y calcular los jugadores que han promediado mayor cantidad de puntos por partido que ese valor
-    11. Ingresar un valor y calcular los jugadores que han promediado mas rebotes por partido que ese valor
-    12. Ingresar un valor y calcular los jugadores que han promediado mas asistencias por partido que ese valor 
-    13. Mostrar el jugador con mas robos totales
-    14. Mostrar el jugador con mas bloqueos totales
-    15. Ingresar un valor y calcular los jugadores que tienen un porcentaje de tiros libres superior a ese valor
-    16. Mostrar el promedio de puntos por partido del DT excluyendo al jugador con la menor cantidad de puntos por partido
-    17. Mostrar el jugador con la mayor cantidad de logros obtenidos
-    18. Ingresar un valor y calcular los jugadores que tienen un porcentaje de tiros triples superior a ese valor
-    19. Mostrar el jugador con la mayor cantidad de temporadas jugadas
-    20. Ingresar un valor y mostrar los jugadores, ordenados por su posicion en cancha, que hayan obtenido un porcentaje de tiros de campo mayor a ese valor
-    '''
-    imprimir_dato(menu)
-
-def dream_team_menu_principal(): 
-    '''
-    imprime el menu y toma una opcion del usuario
-    devuelve la opcion elegida, en caso de False devuelve -1
-    '''
-    mostrar_menu()
-    opcion = input("Ingresa una opción del menú: ").upper()
-    validacion = re.match( r'^[1]?[0-9]{1}$|20|23', opcion)
-    if validacion:
-        return True
-    else:
-        return False
-       
-def validar_numeros(dato:str):
-    """
-    valida si el dato pasado es numerico, y si lo es lo convierte en int o float
-    recibe un str
-    retorna un int o float en caso de ser numerico, si no lo es retorna False
-    """
-    if re.match(r"^\d+(\.\d+)?$", dato):
-        try:
-            return int(dato)
-        except Exception as error:
-            return float(dato)
-    else:
-        return False
 
 def leer_json (ruta:str, encoding='utf-8'):
     with open (ruta, "r") as archivo:
@@ -96,25 +20,163 @@ def leer_json (ruta:str, encoding='utf-8'):
     
     return lista_jugadores
 
+def imprimir_dato(texto:str):
+    """
+    La funcion "imprimir_dato" comprueba si la entrada en una cadena de textoby la imprime,
+    de lo contrario imprime un mensaje advirtiendo que no es una cadena lo que se ingreso.
+    """
+    if type(texto)== str:
+        print(texto)
+    else:
+        print("No es una cadena de texto")
+
+def validar_opcion(expresion:str, ingreso_usuario: str)-> str:
+    """
+    Esta función valida si la entrada del usuario es una opción correcta.
     
-def mostrar_jugadores_dt (lista_jugadores: list): #1
+    :param expresion: un patrón de expresión regular que la entrada del usuario debe coincidir para que
+    se considere válido
+    :type expresion: str
+    :param ingreso_usuario: La entrada del usuario que necesita ser validada. Debería ser una cadena
+    :type ingreso_usuario: str
+    :return: un valor entero si la entrada del usuario coincide con el patrón de expresión regular; de
+    lo contrario, devuelve un valor booleano de False.
     """
     
-    Recibe por parametro una lista con el formato del JSON trabajado, retorna 0 si la lista está vacía. 
-    De lo contrario, pide al usuario que ingrese el índice de un jugador en la lista, y valida que este sea mayor a
-    0 y menor o igual a la cantidad de elementos de la lista. Retorna al jugador y su posicion segun el indice
-    
+    validacion_opcion = False
+    if re.match(expresion, ingreso_usuario):
+        validacion_opcion = int(ingreso_usuario)
+    return validacion_opcion
+
+
+#1
+def mostrar_dream_team(lista_jugadores: list[dict])-> list:   # buscar_nombre_posicion
     """
-    cantidad_jugadores= len(lista_jugadores)
-    if cantidad_jugadores<= 0:
-        return 0
-    for jugador in lista_jugadores:
-        print("{} - {}".format(jugador["nombre"], jugador["posicion"]))
+    La función "mostrar_dream_team" toma una lista de diccionarios que contienen información sobre
+    jugadores de fútbol e imprime sus nombres y posiciones de forma formateada.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores de un equipo,
+    donde cada diccionario contiene las claves 'nombre' (name) y 'posicion' (posición)
+    :type lista_jugadores: list[dict]
+    :return: La función no tiene una declaración de retorno, por lo que devolverá "Ninguno" de forma
+    predeterminada.
+    """
+   
+    
+    if not lista_jugadores:              # mensaje = "Error"
+        print("La lista esta vacia")
+        return False
+    
+    if lista_jugadores:
+        mensaje = "indice - Nombre - Posicion\n"
+        for i in range(len(lista_jugadores)):
+            jugador = lista_jugadores[i]
+            mensaje += "{0} - {1} - {2}".format(i, jugador['nombre'],jugador['posicion']) + "\n"
+    imprimir_dato(mensaje)
+            # def mostrar_jugadores(lista_jugadores: list):
+            # cont = 1
+            # for jugador in lista_jugadores:
+            #    print("{} - {} - {}".format(cont,jugador["nombre"], jugador["posicion"]))
+            #    cont += 1
+    
+    
+    
 
 
+"""
+UTF-8 (Unicode Transformation Format-8) es una codificación de caracteres que puede representar 
+prácticamente todos los caracteres utilizados en cualquier idioma.
+Cuando se trabaja con archivos de texto en Python, es importante asegurarse de que la codificación 
+utilizada coincida con la codificación del archivo. Si no se especifica una codificación, Python respeta
+la codificación predeterminada del sistema operativo, que puede variar. 
+Es una buena práctica especificar la codificación al abrir o guardar archivos para evitar problemas de caracteres incorrectos o ilegibles.
+ """
 
+def imprimir_menu()-> None:
+    menu =\
+    """
+    1. Mostrar la lista de todos los jugadores del Dream Team. Con el formato:
+       
+    2. Seleccionar un jugador por su índice y mostrar sus estadísticas
+       
+    3. Después de mostrar las estadísticas, guardar las estadísticas de ese jugador en un archivo CSV. 
 
+    4. Buscar un jugador por su nombre y mostrar sus logros.
+      
+    5. Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream
+       Team, ordenado por nombre de manera ascendente.
+
+    6. Ingresar el nombre de un jugador y mostrar si ese jugador es
+       miembro del Salón de la Fama del Baloncesto.
+    7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.
+    8. Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.
+    9. Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.
+    10. Ingresar un valor y mostrar los jugadores que han promediado
+        más puntos por partido que ese valor.
+    11. Ingresar un valor y mostrar los jugadores que han promediado
+        más rebotes por partido que ese valor.
+    12. Ingresar un valor y mostrar los jugadores que han promediado
+        más asistencias por partido que ese valor.
+    13. Calcular y mostrar el jugador con la mayor cantidad de robos totales.
+    14. Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.
+    15. Permitir al usuario ingresar un valor y mostrar los jugadores que hayan tenido un
+        porcentaje de tiros libres superior a ese valor.
+    16. Calcular y mostrar el promedio de puntos por partido del equipo excluyendo al
+        jugador con la menor cantidad de puntos por partido.
+    17. Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos
+    18. Permitir al usuario ingresar un valor y mostrar los jugadores que hayan tenido un
+        porcentaje de tiros triples superior a ese valor.
+    19. Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas
+    20. Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por
+        posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a
+        ese valor.
+    """
+    imprimir_dato(menu)
+def dream_team_menu_principal(): 
+    '''
+    imprime el menu y toma una opcion del usuario
+    devuelve la opcion elegida, en caso de False devuelve -1
+    '''
+    imprimir_menu()
+    opcion = input("Ingresa una opción del menú: ").upper()
+    validacion = re.match( r'^[1]?[0-9]{1}$|20|23', opcion)
+    if validacion:
+         return True
+    else:
+         return False
+       
+def validar_numeros(dato:str):
+    """
+    La función valida si una cadena determinada es numérica y la convierte en un número entero o
+    flotante, y devuelve False si no es numérica.
+    
+    :param dato: una cadena que representa un número que debe validarse y convertirse en un número
+    entero o flotante
+    :type dato: str
+    :return: un entero o un flotante si la cadena de entrada es numérica y devuelve False si no es
+    numérica.
+    """
+   
+    if re.match(r"^\d+(\.\d+)?$", dato):
+        try:
+            return int(dato)
+        except Exception as error:
+            return float(dato)
+    else:
+        return False
+    
+#2
 def obtener_nombre_estadisticas(lista_jugadores:list[dict])-> dict:
+    """
+    Esta función toma una lista de diccionarios que representan a los jugadores y un índice, recupera al
+    jugador en ese índice, imprime su nombre y estadísticas y devuelve el diccionario que representa a
+    ese jugador.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type lista_jugadores: list[dict]
+    :return: un diccionario que representa al jugador seleccionado por el usuario, junto con sus
+    estadísticas.
+    """
     """
     Esta funcion toma una lista de diccionarios que representan a los jugadores y un indice, recupera al
     al jugador en ese indice, imprime su nombre y estadisticas y devuelve el diccionario que representa a ese jugador.
@@ -123,7 +185,7 @@ def obtener_nombre_estadisticas(lista_jugadores:list[dict])-> dict:
     if lista_jugadores:
 
         indice = input("Seleccione un jugador por su indice para ver sus caracteristicas: ")
-        indice = validar_respuesta(r'^[0-9]{1,2}$', indice)
+        indice = validar_opcion(r'^[0-9]{1,2}$', indice)
 
         if indice >= 0 and indice < len(lista_jugadores):
             jugador_con_ese_indice = lista_jugadores[indice]
@@ -142,6 +204,15 @@ def obtener_nombre_estadisticas(lista_jugadores:list[dict])-> dict:
 
 #3
 def generar_texto(dicc_jugador: dict)-> str:
+    """
+    La función toma un diccionario de las estadísticas de un jugador y devuelve una cadena formateada
+    que contiene su nombre, posición y estadísticas.
+    
+    :param dicc_jugador: El parámetro "dicc_jugador" es un diccionario que contiene las estadísticas de
+    un jugador, incluido su nombre, posición y otras métricas de rendimiento
+    :type dicc_jugador: dict
+    :return: una cadena formateada que contiene el nombre, la posición y las estadísticas del jugador.
+    """
     """
     Esta funcion toma un diccionario de las estadisticas de un jugador y devuelve una cadena formateada
     que contiene su nombre, posicion y estadisticas
@@ -164,8 +235,19 @@ def generar_texto(dicc_jugador: dict)-> str:
     return datos_str
 
 
-
-def guardar_estadisticas_jugador_CSV(nombre_archivo:str, contenido:str)-> bool:
+def guardar_archivo_csv(nombre_archivo:str, contenido:str)-> bool:
+    """
+    Esta función guarda el contenido de una cadena en un archivo con el nombre de archivo dado y
+    devuelve un valor booleano que indica si la operación fue exitosa o no.
+    
+    :param nombre_archivo: Una cadena que representa el nombre del archivo que se va a crear o
+    sobrescribir
+    :type nombre_archivo: str
+    :param contenido: El contenido (texto) que se escribirá en el archivo
+    :type contenido: str
+    :return: La función siempre devuelve False, independientemente de si la operación se realizó
+    correctamente o no.
+    """
     """
     Esta funcion guarda el contenido de una cadena de un archivo con el nombre de archivo dado y
     devuelve un valor booleano que indica si la operacion fue exitosa o no
@@ -177,9 +259,9 @@ def guardar_estadisticas_jugador_CSV(nombre_archivo:str, contenido:str)-> bool:
         print("Se creo el archivo: {0}".format(nombre_archivo))
         return False
     
-    print("Error al crear el archivo: {0}".format(nombre_archivo))
+    print("Erro al crear el archivo: {0}".format(nombre_archivo))
     return False
-    
+
 
 def buscar_por_nombre(lista_jugadores:list[dict], jugador: dict, nombre: str):
     """
@@ -204,7 +286,18 @@ def buscar_por_nombre(lista_jugadores:list[dict], jugador: dict, nombre: str):
 #4
 def mostrar_logros_por_busqueda(lista_jugadores: list[dict], nombre: str):
     """
+    Esta función toma una lista de diccionarios que contienen información del jugador y un nombre de
+    jugador como entrada, e imprime los logros del jugador con el nombre dado.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus logros
+    :type lista_jugadores: list[dict]
+    :param nombre: El parámetro "nombre" es una cadena que representa el nombre del jugador cuyos logros
+    queremos mostrar
+    :type nombre: str
+    :return: La función no tiene una declaración de devolución, pero imprime información sobre los
+    logros de un jugador cuyo nombre coincide con el parámetro de entrada.
     """
+    
     if len(lista_jugadores) == 0:
         print("Lista vacia")
         return False
@@ -225,6 +318,95 @@ def mostrar_logros_por_busqueda(lista_jugadores: list[dict], nombre: str):
             print("No existe jugador con ese nombre")
 
 
+#5
+def calcular_promedio_total(lista_jugadores:list[dict], estadistica:str):
+    """
+    Esta función calcula el promedio total de una estadística seleccionada para una lista de jugadores.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type lista_jugadores: list[dict]
+    :param estadistica: El nombre de la estadística para la que se calculará el promedio total. Debe ser
+    una cadena y debe coincidir con una de las claves del diccionario "estadisticas" de cada jugador de
+    la lista
+    :type estadistica: str
+    :return: el promedio calculado de la estadística seleccionada para la lista de jugadores
+    proporcionada como entrada. Si la lista está vacía, devuelve -1. Si la estadística seleccionada no
+    se encuentra en el diccionario de estadísticas del jugador, imprime un mensaje que dice que la
+    estadística no existe.
+    """
+    """
+    Esta funcion calcula el promedio total de la estadistica seleccionada
+    """
+    if len(lista_jugadores) == 0:
+        print("Lista vacia.")
+        return -1
+    lista = lista_jugadores[:]
+    if len(lista) <= 1:
+        return lista
+    contador = 0
+    acumulador = 0
+    if estadistica in lista[0]["estadisticas"].keys():
+        for jugador in lista:
+            acumulador += jugador["estadisticas"][estadistica]
+            contador += 1
+        promedio = acumulador / contador
+        return promedio
+    else:
+        print("Estadistica inexixtente")
+
+
+def ordenar_lista_segun_key(lista_jugadores: list[dict], key_a_ordenar : str, flag_estadistica = False, orden_ascendente = True)-> list:
+    """
+    Esta función ordena una lista de diccionarios según una clave específica, con la opción de ordenar
+    en orden ascendente o descendente y considerar diccionarios de estadísticas anidados.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type lista_jugadores: list[dict]
+    :param key_a_ordenar: La clave o atributo del diccionario en la lista de jugadores que se usará para
+    ordenar la lista
+    :type key_a_ordenar: str
+    :param flag_estadistica: Una bandera booleana que indica si la clave a ordenar está anidada dentro
+    de un diccionario bajo la clave "estadisticas" en cada elemento de la lista. Si es Verdadero, la
+    función accederá a la clave anidada para realizar la clasificación. Si es False, se ordenará según
+    la clave de nivel superior proporcionada, defaults to False (optional)
+    :param orden_ascendente: Un parámetro booleano que determina si la lista debe ordenarse en orden
+    ascendente (Verdadero) o descendente (Falso), defaults to True (optional)
+    :return: una lista de diccionarios ordenados según la clave especificada y el orden de
+    clasificación.
+    """
+    """
+    Esta funcion genera una lista ordenada segun param "key_a_odenar" a traves de un metodo de ordenamiento
+    """
+    if len(lista_jugadores)== 0:
+        print("Lista vacia")
+        return False
+    lista = lista_jugadores[:]
+    rango_a = len(lista)
+    flag_swap = True
+    contador = 0
+    while flag_swap:
+        flag_swap = False
+        for indice_A in range(rango_a -1):
+            contador += 1
+            if flag_estadistica == False:
+                if orden_ascendente == True:
+                    if lista[indice_A][key_a_ordenar] > lista[indice_A+1][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+                elif orden_ascendente == False:
+                    if lista[indice_A][key_a_ordenar] < lista[indice_A+1][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+            elif flag_estadistica == True:
+                if orden_ascendente == True:
+                    if lista[indice_A]["estadisticas"][key_a_ordenar] > lista[indice_A+1]["estadisticas"][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+                elif orden_ascendente == False:
+                    if lista[indice_A]["estadisticas"][key_a_ordenar] < lista[indice_A+1]["estadisticas"][key_a_ordenar]:
+                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
+                        flag_swap = True
+    return lista
 
 def mostrar_estadistica_por_jugador_ordenado(lista_jugadores : list[dict], key_orden : str, estadistica: str):
     """
@@ -262,33 +444,75 @@ def mostrar_estadistica_por_jugador_ordenado(lista_jugadores : list[dict], key_o
         print(mensaje)
     return lista_jugador_nombre
 
-
-def imprimir_datos_jugadores_salon(lista_jugadores: list[dict])-> None: #6
-    """   
-    La función recorre la lista de jugadores y verifica si cada jugador tiene el logro 
-    "Miembro del Salon de la Fama del Baloncesto". Si es así, imprime el nombre del jugador y el logro. 
-    Si ningún jugador tiene ese logro, se muestra un mensaje indicando que el jugador no pertenece al Salón de la
-    Fama del Baloncesto.
+#6
+def buscar_jugador_sfb(lista_jugadores: list[dict], nombre: str):
     """
-    if lista_jugadores:
-        for jugador in lista_jugadores:
-            logros = jugador["logros"]
-            flag = True
-            for logro in logros:
-                if "Miembro del Salon de la Fama del Baloncesto" == logro:
-                    print(jugador["nombre"], logro)
-                    flag = False
-            if flag:
-                print("el jugador no pertenece al salon de la fama")
+    Esta función busca el nombre de un jugador en una lista de diccionarios y muestra si está o no en el
+    Salón de la Fama del Baloncesto.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a jugadores de baloncesto, donde
+    cada diccionario contiene información sobre un jugador, como su nombre, logros, etc
+    :type lista_jugadores: list[dict]
+    :param nombre: El nombre del jugador que la función está buscando en la lista de jugadores
+    :type nombre: str
+    :return: La función no tiene una declaración de devolución, por lo que devuelve Ninguno de forma
+    predeterminada.
+    """
+    """
+    Esta funcion muestra un listado de jugadores, junto a su nombre y si se encuentran o no en un salon de fama. )sfb)
+
+    """
+    if len(lista_jugadores) == 0:
+        print("Lista vacia")
+        return False
+    if nombre == " ":
+        print("Nombre vacio.")
     else:
-        print("No se encontraron jugadores que coincidan con el parámetro de búsqueda.")
+        lista = lista_jugadores[:]
+        logro_sfb = "Miembro del Salon de la Fama del Baloncesto"
+        lista_jugadores_sfb = []
+        flag_jugador = False
+        for jugador in lista:
+            busqueda = buscar_por_nombre(lista, jugador, nombre)
+            if busqueda:
+                flag_jugador = True
+                for logro in jugador["logros"]:
+                    if logro == logro_sfb:
+                        lista_jugadores_sfb.append([jugador["nombre"], "Si"])
+                        break
+                    else:
+                        lista_jugadores_sfb.append([jugador["nombre"], " No"])
 
+        mensaje = " "
+        if flag_jugador == False:
+            print("No existe jugador con ese nombre")
+        else:
+            for jugador in lista_jugadores_sfb:
+                mensaje += "Nombre: {0}\nSe encuentra dentro del SFB?: {1}\n\n".format(jugador[0], jugador[1])
+            print(mensaje)
+    
 
+#7
 def encontrar_maximo(lista_jugadores:list[dict], clave_jugador:str, clave_valor:str)-> str:
+    """
+    Esta función encuentra el jugador con el valor máximo para una clave específica en una lista de
+    jugadores y devuelve su nombre y valor como una cadena.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus atributos
+    :type lista_jugadores: list[dict]
+    :param clave_jugador: La clave en el diccionario del jugador que contiene la información a comparar
+    (por ejemplo, "estadisticas")
+    :type clave_jugador: str
+    :param clave_valor: La clave del valor del que queremos encontrar el máximo en la lista de jugadores
+    :type clave_valor: str
+    :return: un mensaje de cadena que indica el jugador con el valor más alto para una clave específica
+    en una lista de diccionarios. Si la lista está vacía o hay un error, devuelve un mensaje de error.
+    """
     """
     Esta funcion encuentra el valor maximo de una clave especifica en la lista de jugadores y devuelve
     el nombre del jugador que tiene ese valor maximo, junto con el valor mismo, en forma de cadena de texto
-    """                     
+    """
+               
     nombre_maximo = None
     maximo = 0
     if lista_jugadores:
@@ -303,6 +527,27 @@ def encontrar_maximo(lista_jugadores:list[dict], clave_jugador:str, clave_valor:
     return mensaje
 
 def mostrar_jugadores_promediado_mas_stat(lista_jugadores:list[dict], estadistica: str, valor_stat: float, flag_mostrar_posicion: False ):
+    """
+    Esta función muestra los jugadores que superan un determinado valor en una determinada estadística
+    y, opcionalmente, puede mostrar su posición.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type lista_jugadores: list[dict]
+    :param estadistica: una cadena que representa la estadística a comparar (por ejemplo, "puntos",
+    "rebotes", "asistencias")
+    :type estadistica: str
+    :param valor_stat: El valor de la estadística que queremos comparar con las estadísticas de los
+    jugadores
+    :type valor_stat: float
+    :param flag_mostrar_posicion: El parámetro flag_mostrar_posicion es una bandera booleana que
+    determina si mostrar o no la posición de los jugadores en la salida. Si se establece en True, la
+    posición de los jugadores se mostrará junto con su nombre y el valor de la estadística especificada.
+    Si se establece en falso
+    :type flag_mostrar_posicion: False
+    :return: una lista de jugadores que tienen una estadística mayor que el valor de entrada, junto con
+    su nombre y posición. Si la lista de entrada está vacía, la función devuelve False. Si ningún
+    jugador cumple con los criterios, la función imprime un mensaje y devuelve una lista vacía.
+    """
     """
     Esta funcion muestra los jugadores que superen el valor de la estadistica deseada.
     """
@@ -325,45 +570,21 @@ def mostrar_jugadores_promediado_mas_stat(lista_jugadores:list[dict], estadistic
             print(mensaje)
             return lista_jugadores_prom_mayor
     
-def ordenar_lista_segun_key(lista_jugadores: list[dict], key_a_ordenar : str, flag_estadistica = False, orden_ascendente = True)-> list:
-    """
-    Esta funcion genera una lista ordenada segun param "key_a_odenar" a traves de un metodo de ordenamiento
-    """
-    if len(lista_jugadores)== 0:
-        print("Lista vacia")
-        return False
-    lista = lista_jugadores[:]
-    rango_a = len(lista)
-    flag_swap = True
-    contador = 0
-    while flag_swap:
-        flag_swap = False
-        for indice_A in range(rango_a -1):
-            contador += 1
-            if flag_estadistica == False:
-                if orden_ascendente == True:
-                    if lista[indice_A][key_a_ordenar] > lista[indice_A+1][key_a_ordenar]:
-                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
-                        flag_swap = True
-                elif orden_ascendente == False:
-                    if lista[indice_A][key_a_ordenar] < lista[indice_A+1][key_a_ordenar]:
-                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
-                        flag_swap = True
-            elif flag_estadistica == True:
-                if orden_ascendente == True:
-                    if lista[indice_A]["estadisticas"][key_a_ordenar] > lista[indice_A+1]["estadisticas"][key_a_ordenar]:
-                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
-                        flag_swap = True
-                elif orden_ascendente == False:
-                    if lista[indice_A]["estadisticas"][key_a_ordenar] < lista[indice_A+1]["estadisticas"][key_a_ordenar]:
-                        lista[indice_A], lista[indice_A+1] = lista[indice_A+1], lista[indice_A]
-                        flag_swap = True
-    return lista
-    
 def generar_promedio_segun_stat_menos_peor_valor(lista_jugadores:list[dict], estadistica: str):
     """
-    Esta funcion genera el promedio de la suma de la estadistica elegida, sin tener en cuenta el stat del jugador que 
-    peor promedia
+    Esta función genera el promedio de una estadística elegida para una lista de jugadores, excluyendo
+    al jugador con el peor promedio para esa estadística.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
+    :type lista_jugadores: list[dict]
+    :param estadistica: El parámetro "estadistica" es una cadena que representa el nombre de la
+    estadística para la cual queremos generar el promedio
+    :type estadistica: str
+    :return: ya sea el promedio calculado de la estadística elegida o Falso si la lista de entrada está
+    vacía.
+    """
+    """
+    Esta funcion genera el promedio de la suma de la estadistica elegida, sin tener en cuenta el stat del jugador que peor promedia
     """
     if len(lista_jugadores) == 0:
         print("Lista vacia")
@@ -384,11 +605,17 @@ def generar_promedio_segun_stat_menos_peor_valor(lista_jugadores:list[dict], est
 
 def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
     """
+    Esta función calcula el jugador con más logros en su carrera de una lista de jugadores.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores de baloncesto y
+    sus logros
+    :type lista_jugadores: list[dict]
+    :return: un diccionario con el jugador que más logros tiene en su carrera.
+    """
+    """
     Calcula el jugador con mas logros en su carrera
     recibe la lista de jugadores
     retorna el jugador con mas logros obtenidos(dict)
-    crea una copia de la lista original, recorre los logros de cada jugador, si el logro tiene un año, 
-    se incrementa el contador 
     """
     lista_de_jugadores = lista_jugadores[:]
 
@@ -423,9 +650,16 @@ def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
 
 def jugador_mas_temporadas(jugadores:list[dict])-> None:
     """
+    Esta función encuentra al jugador(es) con la mayor cantidad de temporadas jugadas en base a una
+    lista de diccionarios de jugadores y los imprime junto con su número de temporadas.
+    
+    :param jugadores: una lista de diccionarios que representan a los jugadores, donde cada diccionario
+    contiene información sobre un jugador, como su nombre y estadísticas
+    :type jugadores: list[dict]
+    """
+    """
     Esta funcion encuentra al jugador(es) con la mayor cantidad de temporadas jugadas en base a una
-    lista de dicc de jugadores y los imprime uno a la vez junto con su cantidad de temporadas
-    (como cuando sacamos un max o min, compara el maximo en cada vuelta con el valor de temporadas que encuentra)
+    lista de dicc de jugadores y los imprime uno a la vex junto con su cantidad de temporadas 
     """
     max_temporadas = 0
     jugadores_max_temporadas = []
@@ -440,32 +674,3 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
     print("Jugadores con la mayor cantidad de temporadas jugadas:")
     for jugador, temporadas in jugadores_max_temporadas:
         print("Jugador: {} | Temporadas: {}".format(jugador, temporadas))
-
-
-    
-def determinar_cant_jugadores_por_posicion(lista_de_jugadores:list):
-    
-    cantidad_jugadores_por_posicion = {}
-    for jugador in lista_jugadores:
-        posicion = jugador["posicion"]
-
-        if posicion in cantidad_jugadores_por_posicion:
-            cantidad_jugadores_por_posicion[posicion] += 1
-        else:
-            cantidad_jugadores_por_posicion[posicion] = 1
-
-    return cantidad_jugadores_por_posicion
-
-def mostrar_lista_jugadores_cantidad_All_Star_descendente(lista_jugadores):
-    pass
-# La salida por pantalla debe tener un formato similar a este:
-# Michael Jordan (14 veces All Star)
-# Magic Johnson (12 veces All-Star)
-
-
-
-def jugador_mejores_estadisticas(jugadores:list[dict])-> None:
-    pass
-
-
-
