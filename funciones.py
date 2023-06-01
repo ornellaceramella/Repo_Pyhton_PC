@@ -19,6 +19,16 @@ def leer_json (ruta:str, encoding='utf-8'):
         lista_jugadores = data["jugadores"]
     
     return lista_jugadores
+        
+"""
+UTF-8 (Unicode Transformation Format-8) es una codificación de caracteres que puede representar 
+prácticamente todos los caracteres utilizados en cualquier idioma.
+Cuando se trabaja con archivos de texto en Python, es importante asegurarse de que la codificación 
+utilizada coincida con la codificación del archivo. Si no se especifica una codificación, Python respeta
+la codificación predeterminada del sistema operativo, que puede variar. 
+Es una buena práctica especificar la codificación al abrir o guardar archivos para evitar problemas de caracteres incorrectos o ilegibles.
+ """
+
 
 def imprimir_dato(texto:str):
     """
@@ -44,7 +54,7 @@ def validar_opcion(expresion:str, ingreso_usuario: str)-> str:
     """
     
     validacion_opcion = False
-    if re.match(expresion, ingreso_usuario):
+    if re.match(expresion, ingreso_usuario): #busca coincidencia entre el patron (en el inicio) y la cadena
         validacion_opcion = int(ingreso_usuario)
     return validacion_opcion
 
@@ -54,14 +64,7 @@ def mostrar_dream_team(lista_jugadores: list[dict])-> list:   # buscar_nombre_po
     """
     La función "mostrar_dream_team" toma una lista de diccionarios que contienen información sobre
     jugadores de fútbol e imprime sus nombres y posiciones de forma formateada.
-    
-    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores de un equipo,
-    donde cada diccionario contiene las claves 'nombre' (name) y 'posicion' (posición)
-    :type lista_jugadores: list[dict]
-    :return: La función no tiene una declaración de retorno, por lo que devolverá "Ninguno" de forma
-    predeterminada.
     """
-   
     
     if not lista_jugadores:              # mensaje = "Error"
         print("La lista esta vacia")
@@ -73,39 +76,17 @@ def mostrar_dream_team(lista_jugadores: list[dict])-> list:   # buscar_nombre_po
             jugador = lista_jugadores[i]
             mensaje += "{0} - {1} - {2}".format(i, jugador['nombre'],jugador['posicion']) + "\n"
     imprimir_dato(mensaje)
-            # def mostrar_jugadores(lista_jugadores: list):
-            # cont = 1
-            # for jugador in lista_jugadores:
-            #    print("{} - {} - {}".format(cont,jugador["nombre"], jugador["posicion"]))
-            #    cont += 1
-    
-    
-    
-
-
-"""
-UTF-8 (Unicode Transformation Format-8) es una codificación de caracteres que puede representar 
-prácticamente todos los caracteres utilizados en cualquier idioma.
-Cuando se trabaja con archivos de texto en Python, es importante asegurarse de que la codificación 
-utilizada coincida con la codificación del archivo. Si no se especifica una codificación, Python respeta
-la codificación predeterminada del sistema operativo, que puede variar. 
-Es una buena práctica especificar la codificación al abrir o guardar archivos para evitar problemas de caracteres incorrectos o ilegibles.
- """
+           
 
 def imprimir_menu()-> None:
     menu =\
     """
     1. Mostrar la lista de todos los jugadores del Dream Team. Con el formato:
-       
     2. Seleccionar un jugador por su índice y mostrar sus estadísticas
-       
     3. Después de mostrar las estadísticas, guardar las estadísticas de ese jugador en un archivo CSV. 
-
     4. Buscar un jugador por su nombre y mostrar sus logros.
-      
     5. Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream
        Team, ordenado por nombre de manera ascendente.
-
     6. Ingresar el nombre de un jugador y mostrar si ese jugador es
        miembro del Salón de la Fama del Baloncesto.
     7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.
@@ -136,6 +117,7 @@ def imprimir_menu()-> None:
     27. Determinar qué jugador tiene las mejores estadísticas de todos.
     """
     imprimir_dato(menu)
+    
 def dream_team_menu_principal(): 
     '''
     imprime el menu y toma una opcion del usuario
@@ -143,7 +125,7 @@ def dream_team_menu_principal():
     '''
     imprimir_menu()
     opcion = input("Ingresa una opción del menú: ").upper()
-    validacion = re.match( r'^[1]?[0-9]{1}$|20|23', opcion)
+    validacion = re.match( r'^[1]?[0-9]{1}$|20|23|24|25|26|27', opcion)
     if validacion:
          return True
     else:
@@ -157,8 +139,7 @@ def validar_numeros(dato:str):
     :param dato: una cadena que representa un número que debe validarse y convertirse en un número
     entero o flotante
     :type dato: str
-    :return: un entero o un flotante si la cadena de entrada es numérica y devuelve False si no es
-    numérica.
+    
     """
    
     if re.match(r"^\d+(\.\d+)?$", dato):
@@ -170,41 +151,7 @@ def validar_numeros(dato:str):
         return False
     
 #2
-def obtener_nombre_estadisticas(lista_jugadores:list[dict])-> dict:
-    """
-    Esta función toma una lista de diccionarios que representan a los jugadores y un índice, recupera al
-    jugador en ese índice, imprime su nombre y estadísticas y devuelve el diccionario que representa a
-    ese jugador.
-    
-    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores y sus estadísticas
-    :type lista_jugadores: list[dict]
-    :return: un diccionario que representa al jugador seleccionado por el usuario, junto con sus
-    estadísticas.
-    """
-    """
-    Esta funcion toma una lista de diccionarios que representan a los jugadores y un indice, recupera al
-    al jugador en ese indice, imprime su nombre y estadisticas y devuelve el diccionario que representa a ese jugador.
 
-    """
-    if lista_jugadores:
-
-        indice = input("Seleccione un jugador por su indice para ver sus caracteristicas: ")
-        indice = validar_opcion(r'^[0-9]{1,2}$', indice)
-
-        if indice >= 0 and indice < len(lista_jugadores):
-            jugador_con_ese_indice = lista_jugadores[indice]
-            
-            dic_estadisticas = {}
-            dic_estadisticas = jugador_con_ese_indice["estadisticas"]
-
-            print(jugador_con_ese_indice["nombre"])
-            
-            for clave, valor in dic_estadisticas.items():
-                print(clave, valor)
-        else:
-            print("El indice es incorresto {0}".format(indice))
-    
-    return jugador_con_ese_indice
 
 #3
 def generar_texto(dicc_jugador: dict)-> str:
@@ -261,7 +208,7 @@ def guardar_archivo_csv(nombre_archivo:str, contenido:str)-> bool:
         resultado = archivo.write(contenido)
     if resultado:
         print("Se creo el archivo: {0}".format(nombre_archivo))
-        return False
+        return True
     
     print("Erro al crear el archivo: {0}".format(nombre_archivo))
     return False
@@ -633,12 +580,12 @@ def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
             patron_cuatro_digitos = r"\d{4}"
             if re.search(patron_cuatro_digitos, logro):  # si hay un año en el logro entra
                 acumulador_logros += len(re.findall(patron_cuatro_digitos, logro))  # busca esos años, y el len va a indicar cuantos son y se suman al acumulador
-            elif "Miembro" in logro:
+            elif "Miembro" in logro: #Verifica si el logro contiene la palabra "Miembro". Entra en el bloque si se cumple.
                 acumulador_logros += 1
-            else:
-                patron = r"\d{3}"
+            else: #Si no se cumple ninguna de las condiciones anteriores, se ejecuta este bloque.
+                patron = r"\d{3}" 
                 if re.match(patron, logro): # si el logro empieza con 1 o 2 digitos entra.
-                    acumulador_logros += int(re.findall(patron, logro)[0]) # trae el numero de cada logro, lo parsea y lo suma al acumulador
+                    acumulador_logros += int(re.findall(patron, logro)[0]) # trae el numero de cada logro, lo descompone en componentes más pequeños y significativos y lo suma al acumulador
         logros_jugadores.append(lista_de_jugadores.index(jugador)) # agrego el indice del jugador de la lista real
         logros_jugadores.append(acumulador_logros) # agrego la cantidad de logros que tenga  ese jugador
         logros_jugadores_sin_indices.append(acumulador_logros) # lista aparte solo con logros
@@ -646,10 +593,12 @@ def jugador_mas_logros(lista_jugadores:list[dict])-> dict:
         acumulador_logros = 0
     for indice in range(len(logros_jugadores_sin_indices)): # recorro segun el largo de la lista de solo logros
         if indice == 0 or float(logros_jugadores_sin_indices[maximo_indice]) < float(logros_jugadores_sin_indices[indice]):
+            #Verifica si el índice actual es 0 o el valor de logros en el índice máximo es menor al valor de logros en el 
+            # índice actual. Entra en el bloque si se cumple.
             maximo_indice = indice
-            numero_maximo = logros_jugadores_sin_indices[maximo_indice]
+            numero_maximo = logros_jugadores_sin_indices[maximo_indice] #Almacena el número máximo de logros.
     indice_jugador_mas_logros = logros_jugadores[logros_jugadores.index(numero_maximo) -1] # dentro del [] obtiene el indice anterior del numero_maximo,
-                                                                                           # que seria el indice del jugador en la listaoriginal. al ser jordan da 0
+                                                                                           # que seria el indice del jugador en la lista original. al ser jordan da 0
                                                                         # y los logros_jugadores[x] te da la posicion real del json del jugador con mas logros
     return lista_de_jugadores[indice_jugador_mas_logros]
 
@@ -679,4 +628,31 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
     print("Jugadores con la mayor cantidad de temporadas jugadas:")
     for jugador, temporadas in jugadores_max_temporadas:
         print("Jugador: {} | Temporadas: {}".format(jugador, temporadas))
+
+def cantidad_jugadores_por_posicion(lista_jugadores):
+    jugadores_por_posicion = {}
+    for jugador in jugadores:
+        posicion = jugador["posicion"]
+        if posicion in jugadores_por_posicion:
+            jugadores_por_posicion[posicion] += 1
+        else:
+            jugadores_por_posicion[posicion] = 1
+    
+    for posicion, cantidad in jugadores_por_posicion.items():
+        print(posicion + ": " + str(cantidad))
+
+def mostrar_jugadores_cantidad_allstar(lista_jugadores): #ver
+    pass
+           
+def jugador_mejores_estadisticas_por_valor(lista_jugadores, estadistica):
+    pass
+def jugador_mejores_estadisticas(lista_jugadores): #verrr
+    mejor_jugador = max(lista_jugadores, key=lambda jugador: sum(jugador["estadisticas"].values()))
+    print("Mejor jugador en todas las estadísticas: " + mejor_jugador["nombre"])
+
+
+
+
+
+
 
