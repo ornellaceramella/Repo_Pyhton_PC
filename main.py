@@ -83,7 +83,7 @@ def app(lista_jugadores:list[dict]) -> None:
                 if valor_ingresado.replace(".", "").isnumeric():
                     mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
-                    print("valor ingresado erroneo, vuelva al menu e ingrese una opcion valida")
+                    print("Valor ingresado erroneo, vuelva al menu e ingrese una opcion valida")
             case 16:
                 estadistica_buscada = "promedio_puntos_por_partido"
                 promedio = generar_promedio_segun_stat_menos_peor_valor(lista_jugadores, estadistica_buscada)
@@ -99,7 +99,7 @@ def app(lista_jugadores:list[dict]) -> None:
                 if valor_ingresado.replace(".", "").isnumeric():
                     mostrar_jugadores_promediado_mas_stat(lista_jugadores, estadistica, valor_stat, flag_mostrar_posicion)
                 else:
-                    print("valor ingresado erroneo, vuelva al menu e ingrese una opcion nuevamente")
+                    print("Valor ingresado erroneo, vuelva al menu e ingrese una opcion nuevamente")
 
             case 19:
                 jugador_mas_temporadas(lista_jugadores)
@@ -110,7 +110,9 @@ def app(lista_jugadores:list[dict]) -> None:
                 if valor_ingresado.replace(".", "").isnumeric():
                     mostrar_jugadores_promediado_mas_stat(lista_ordenada, estadistica_buscada, float(valor_ingresado), True)
                 else:
-                    print("valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
+                    print("Valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
+            case 23:
+                pass
             case 24:
                 cantidad_jugadores_por_posicion(lista_jugadores)
             case 25:

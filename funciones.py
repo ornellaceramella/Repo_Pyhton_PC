@@ -58,7 +58,6 @@ def validar_opcion(expresion:str, ingreso_usuario: str)-> str:
         validacion_opcion = int(ingreso_usuario)
     return validacion_opcion
 
-
 #1
 def mostrar_dream_team(lista_jugadores: list[dict])-> list:   # buscar_nombre_posicion
     """
@@ -141,7 +140,7 @@ def validar_numeros(dato:str):
     :type dato: str
     
     """
-   
+
     if re.match(r"^\d+(\.\d+)?$", dato):
         try:
             return int(dato)
@@ -631,7 +630,7 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
 
 def cantidad_jugadores_por_posicion(lista_jugadores):
     jugadores_por_posicion = {}
-    for jugador in jugadores:
+    for jugador in lista_jugadores:
         posicion = jugador["posicion"]
         if posicion in jugadores_por_posicion:
             jugadores_por_posicion[posicion] += 1
@@ -641,14 +640,39 @@ def cantidad_jugadores_por_posicion(lista_jugadores):
     for posicion, cantidad in jugadores_por_posicion.items():
         print(posicion + ": " + str(cantidad))
 
+    #Se crea un diccionario vacío llamado jugadores_por_posicion para almacenar la cantidad de jugadores por posición.
+    #si ya existe se suma uno a esa posicion
+
+
 def mostrar_jugadores_cantidad_allstar(lista_jugadores): #ver
-    pass
+    logros = lista_jugadores["logros"]
+    all_star_count = 0
+    for logro in logros:
+        if "veces All-Star" in logro:
+            cantidad = "".join(filter(str.isdigit, logro))
+            all_star_count = int(cantidad)
+            break
+    return all_star_count
            
 def jugador_mejores_estadisticas_por_valor(lista_jugadores, estadistica):
     pass
+
 def jugador_mejores_estadisticas(lista_jugadores): #verrr
     mejor_jugador = max(lista_jugadores, key=lambda jugador: sum(jugador["estadisticas"].values()))
     print("Mejor jugador en todas las estadísticas: " + mejor_jugador["nombre"])
+# utiliza la función max() para encontrar el jugador con el valor máximo de una determinada clave. 
+# La clave se define mediante una función lambda que toma un jugador y calcula la suma de los valores en el diccionario
+# de estadísticas del jugador. La función sum() se utiliza para sumar todos los valores del diccionario.
+# lambda función sin nombre que se puede definir en una sola línea
+
+# la función jugador_mejores_estadisticas encuentra el jugador con las mejores
+#  estadísticas sumando los valores en el diccionario de estadísticas y muestra su nombre en la consola.
+
+
+
+
+
+
 
 
 
