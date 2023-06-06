@@ -645,15 +645,16 @@ def cantidad_jugadores_por_posicion(lista_jugadores):
 
 
 def mostrar_jugadores_cantidad_allstar(lista_jugadores): #ver
-    logros = lista_jugadores["logros"]
     all_star_count = 0
-    for logro in logros:
-        if "veces All-Star" in logro:
-            cantidad = "".join(filter(str.isdigit, logro))
-            all_star_count = int(cantidad)
-            break
+    for jugador in lista_jugadores:
+        logros = jugador.get("logros", [])
+        for logro in logros:
+            if "veces All-Star" in logro:
+                cantidad = "".join(filter(str.isdigit, logro))
+                all_star_count += int(cantidad)
+                break
     return all_star_count
-           
+    
 def jugador_mejores_estadisticas_por_valor(lista_jugadores, estadistica):
     pass
 
