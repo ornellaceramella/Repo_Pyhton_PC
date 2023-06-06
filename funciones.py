@@ -62,7 +62,7 @@ def validar_opcion(expresion:str, ingreso_usuario: str)-> str:
 def mostrar_dream_team(lista_jugadores: list[dict])-> list:   # buscar_nombre_posicion
     """
     La función "mostrar_dream_team" toma una lista de diccionarios que contienen información sobre
-    jugadores de fútbol e imprime sus nombres y posiciones de forma formateada.
+    jugadores de basquet e imprime sus nombres y posiciones de forma formateada.
     """
     
     if not lista_jugadores:              # mensaje = "Error"
@@ -628,6 +628,11 @@ def jugador_mas_temporadas(jugadores:list[dict])-> None:
     for jugador, temporadas in jugadores_max_temporadas:
         print("Jugador: {} | Temporadas: {}".format(jugador, temporadas))
 
+23
+def punto_extra_bonus(lista_jugadores):
+    pass
+
+24
 def cantidad_jugadores_por_posicion(lista_jugadores):
     jugadores_por_posicion = {}
     for jugador in lista_jugadores:
@@ -643,22 +648,27 @@ def cantidad_jugadores_por_posicion(lista_jugadores):
     #Se crea un diccionario vacío llamado jugadores_por_posicion para almacenar la cantidad de jugadores por posición.
     #si ya existe se suma uno a esa posicion
 
-
+25
 def mostrar_jugadores_cantidad_allstar(lista_jugadores): #ver
-    all_star_count = 0
-    for jugador in lista_jugadores:
-        logros = jugador.get("logros", [])
-        for logro in logros:
-            if "veces All-Star" in logro:
-                cantidad = "".join(filter(str.isdigit, logro))
-                all_star_count += int(cantidad)
-                break
-    return all_star_count
+    flag = True
+    jugadores_allstar = []
     
-def jugador_mejores_estadisticas_por_valor(lista_jugadores, estadistica):
+    for jugador in lista_jugadores:
+        logro= jugador["logros"]
+        for logro in jugador["logros"]:
+            if "veces All-Star" in logro:
+                numero_all_star = re.findall(r'\d+', logro)
+                numero_all_star = int(numero_all_star[0])
+                jugadores_allstar.append({"nombre":jugador["nombre"],"cant_all_star":numero_all_star})
+
+    return jugadores_allstar
+
+26
+def obtener_mejor_jugador_cada_categoria(lista_jugadores):
     pass
 
-def jugador_mejores_estadisticas(lista_jugadores): #verrr
+27
+def jugador_mejores_estadisticas(lista_jugadores): 
     mejor_jugador = max(lista_jugadores, key=lambda jugador: sum(jugador["estadisticas"].values()))
     print("Mejor jugador en todas las estadísticas: " + mejor_jugador["nombre"])
 # utiliza la función max() para encontrar el jugador con el valor máximo de una determinada clave. 

@@ -112,13 +112,13 @@ def app(lista_jugadores:list[dict]) -> None:
                 else:
                     print("Valor erroneo, por favor vuelva al menu e ingrese una opcion nuevamente")
             case 23:
-                pass
+                punto_extra_bonus(lista_jugadores)
             case 24:
                 cantidad_jugadores_por_posicion(lista_jugadores)
             case 25:
-                mostrar_jugadores_cantidad_allstar(lista_jugadores) #ver
+                mostrar_jugadores_cantidad_allstar(lista_jugadores)
             case 26:
-                jugador_mejores_estadisticas_por_valor(lista_jugadores, estadistica) #ver
+                obtener_mejor_jugador_cada_categoria(lista_jugadores)
             case 27:
                 jugador_mejores_estadisticas(lista_jugadores)
         limpiar_consola()
