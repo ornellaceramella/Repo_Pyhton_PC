@@ -650,11 +650,9 @@ def cantidad_jugadores_por_posicion(lista_jugadores):
 
 25
 def mostrar_jugadores_cantidad_allstar(lista_jugadores): #ver
-    flag = True
+
     jugadores_allstar = []
-    
     for jugador in lista_jugadores:
-        logro= jugador["logros"]
         for logro in jugador["logros"]:
             if "veces All-Star" in logro:
                 numero_all_star = re.findall(r'\d+', logro)

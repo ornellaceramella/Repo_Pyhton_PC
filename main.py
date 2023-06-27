@@ -91,7 +91,7 @@ def app(lista_jugadores:list[dict]) -> None:
             case 17:
                 dict_jugador = jugador_mas_logros(lista_jugadores)
                 print("el jugador con mas logros es {}, con los siguientes:".format(dict_jugador["nombre"]))
-                for logro in dict_jugador["logors"]:
+                for logro in dict_jugador["logros"]:
                     print(logro)
             case 18:
                 estadistica = "porcentaje_tiros_triples"
